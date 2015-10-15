@@ -5,15 +5,15 @@ var Gain = require('audio-gain');
 var Speaker = require('audio-speaker');
 var Generator = require('audio-generator');
 
-Generator({
-	duration: 2
-})
-.pipe(Gain(0.2))
-.pipe(Speaker());
+var generator = Generator({ duration: 2 });
+var gain = Gain(0.2);
+var speaker = Speaker();
 
 setTimeout(function () {
+	gain.setVolume(0.5);
+}, 1000);
 
-}, 1000)
+generator.pipe(gain).pipe(speaker);
 ```
 
 
