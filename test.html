@@ -1,0 +1,19 @@
+<!doctype html>
+
+<meta charset="utf-8">
+<title>Audio-gain</title>
+<link rel="import" href=".">
+
+<audio-gain id="gain" volume="0.1" connect="#speaker"/>
+
+<script type="text/javascript" src="./bundle.js"></script>
+
+<script>
+var Generator = require('audio-generator');
+var Speaker = require('audio-speaker');
+
+var gainEl = document.getElementById('gain');
+var gain = gainEl.gain;
+
+Generator({duration: 10}).pipe(gain).pipe(Speaker());
+</script>

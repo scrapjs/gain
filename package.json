@@ -1,0 +1,40 @@
+{
+  "name": "audio-gain",
+  "version": "1.0.0",
+  "description": "Gain node for PCM audio stream",
+  "main": "index.js",
+  "browser": "browser.js",
+  "scripts": {
+    "test": "node test",
+    "build": "browserify index.js -d -o ./gain.js",
+    "watch": "watchify index.js -d -o ./gain.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/audio-lab/gain"
+  },
+  "keywords": [
+    "audio",
+    "pcm",
+    "sound",
+    "web-audio",
+    "web-components"
+  ],
+  "author": "Deema Yvanow <dfcreative@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/audio-lab/gain/issues"
+  },
+  "homepage": "https://github.com/audio-lab/gain",
+  "dependencies": {
+    "inherits": "^2.0.1",
+    "pcm-util": "^1.1.0",
+    "xtend": "^4.0.0"
+  },
+  "devDependencies": {
+    "audio-generator": "^1.0.3",
+    "audio-speaker": "^1.0.2",
+    "browserify": "^11.2.0",
+    "watchify": "^3.4.0"
+  }
+}
