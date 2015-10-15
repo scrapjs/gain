@@ -6,7 +6,7 @@
   "browser": "browser.js",
   "scripts": {
     "test": "node test",
-    "build": "browserify index.js -d -o ./gain.js",
+    "build": "browserify index.js -o ./gain.js",
     "watch": "watchify index.js -d -o ./gain.js"
   },
   "repository": {

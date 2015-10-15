@@ -4,3 +4,4 @@
 * connect/disconnect
 * styles
 * CLI - help, version, options: full, short, decibels, multiplicator
+* Factor out common browserify bundles
