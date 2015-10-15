@@ -17,7 +17,7 @@ generator.pipe(gain).pipe(speaker);
 ```
 
 
-## `<audio-gain></audio-gain>`
+#### `<audio-gain></audio-gain>`
 
 ```html
 <link rel="import" href="node_modules/audio-speaker">
@@ -30,7 +30,7 @@ generator.pipe(gain).pipe(speaker);
 ```
 
 
-## `$ gain`
+#### `$ gain`
 
 ```sh
 $ cat sample.wav | gain --volume 0.5 | speaker
