@@ -1,5 +1,6 @@
 [![npm install audio-gain](https://nodei.co/npm/audio-gain.png?mini=true)](https://npmjs.org/package/audio-gain/)
 
+
 ```js
 var Gain = require('audio-gain');
 var Speaker = require('audio-speaker');
@@ -17,8 +18,6 @@ generator.pipe(gain).pipe(speaker);
 ```
 
 
-#### &lt;audio-gain&gt;&lt;/audio-gain&gt;
-
 ```html
 <link rel="import" href="node_modules/audio-speaker">
 <link rel="import" href="node_modules/audio-generator">
@@ -30,13 +29,10 @@ generator.pipe(gain).pipe(speaker);
 ```
 
 
-#### $ gain
-
 ```sh
 $ cat sample.wav | gain --volume 0.5 | speaker
 ```
 
 
-<br/>
 > [GainNode](https://developer.mozilla.org/en-US/docs/Web/API/GainNode) — gain node in web-audio-api.</br>
 > [pcm-volume](https://npmjs.org/package/pcm-volume) — similar package, volume is taken as tangential.</br>
