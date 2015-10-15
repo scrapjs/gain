@@ -39,4 +39,4 @@ $ cat sample.wav | gain --volume 0.5 | speaker
 
 <br/>
 > [GainNode](https://developer.mozilla.org/en-US/docs/Web/API/GainNode) — gain node in web-audio-api.</br>
-> [pcm-volume](https://developer.mozilla.org/en-US/docs/Web/API/pcm-volume) — similar package, volume is taken as tangential.</br>
+> [pcm-volume](https://npmjs.org/package/pcm-volume) — similar package, volume is taken as tangential.</br>
