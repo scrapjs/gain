@@ -5,11 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "node test.js",
-    "build-css": "autoprefixer index.css -o ./dist/gain.css",
     "build": "browserify gain.js -o ./dist/gain.js",
-    "watch": "watchify gain.js -d -o ./dist/gain.js"
+    "watch": "watchify -r ./index.js:audio-gain -r audio-speaker -r audio-element -r audio-generator -d -o ./bundle.js"
   },
-  "style": "index.css",
   "repository": {
     "type": "git",
     "url": "https://github.com/audio-lab/gain"

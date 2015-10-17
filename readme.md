@@ -19,6 +19,7 @@ generator.pipe(gain).pipe(speaker);
 
 
 ```html
+<script src="./bundled-dependencies.js"></script>
 <link rel="import" href="node_modules/audio-speaker">
 <link rel="import" href="node_modules/audio-generator">
 <link rel="import" href="node_modules/audio-gain">

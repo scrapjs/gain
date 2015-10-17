@@ -1,9 +1,16 @@
 /**
- * Gain HTML element.
+ * <audio-gain> HTML element.
+ *
+ * Does not export anything as it is not a module, it is pre-cooked web-component.
+ *
+ * To make it work, browserify bundle first with dependencies:
+ * `browserify -r audio-gain -r audio-element`
+ * and connect it before the import link:
+ * <link rel="import" href="./node_modules/audio-gain"/>
  *
  * @module audio-gain/element
  */
-var Gain = require('.');
+var Gain = require('audio-gain');
 var AudioElement = require('audio-element');
 
 
@@ -80,6 +87,6 @@ GainPrototype.description = 'Control the volume';
 
 
 /** Register custom element */
-module.exports = document.registerElement('audio-gain', {
+document.registerElement('audio-gain', {
 	prototype: GainPrototype
 });
