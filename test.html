@@ -1,19 +1,23 @@
 <!doctype html>
 
 <meta charset="utf-8">
-<title>Audio-gain</title>
+<title>Audio-gain test</title>
+
 <link rel="import" href=".">
+<link rel="import" href="./node_modules/audio-speaker">
 
 <audio-gain id="gain" volume="0.1" connect="#speaker"/>
+<audio-speaker id="speaker" volume="0.1"/>
 
 <script type="text/javascript" src="./bundle.js"></script>
 
 <script>
 var Generator = require('audio-generator');
-var Speaker = require('audio-speaker');
 
+var speakerEl = document.getElementById('speaker');
+var speaker = speakerEl.speaker;
 var gainEl = document.getElementById('gain');
-var gain = gainEl.gain;
+var gain = gainEl.stream;
 
-Generator({duration: 10}).pipe(gain).pipe(Speaker());
+Generator({duration: 10}).pipe(gain);
 </script>
