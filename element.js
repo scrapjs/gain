@@ -4,8 +4,9 @@
  * Does not export anything as it is not a module, it is pre-cooked web-component.
  *
  * To make it work, browserify bundle first with dependencies:
- * `browserify -r audio-gain -r audio-element`
+ * `browserify -r audio-gain -r audio-element -o deps.js`
  * and connect it before the import link:
+ * <script src="deps.js"></script>
  * <link rel="import" href="./node_modules/audio-gain"/>
  *
  * @module audio-gain/element

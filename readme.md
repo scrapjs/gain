@@ -24,9 +24,9 @@ generator.pipe(gain).pipe(speaker);
 <link rel="import" href="node_modules/audio-generator">
 <link rel="import" href="node_modules/audio-gain">
 
-<audio-generator id="generator" connect="#gain"/>
-<audio-gain volume="0.3" id="gain" connect="#speaker"/>
-<audio-speaker id="speaker"/>
+<audio-generator id="generator" connect="#gain"></audio-generator>
+<audio-gain volume="0.3" id="gain" connect="#speaker"></audio-gain>
+<audio-speaker id="speaker"></audio-speaker>
 ```
 
 
