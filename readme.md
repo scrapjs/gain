@@ -1,4 +1,4 @@
-_Audio-gain_ is a transform stream to change the volume of audio data. It includes stream class itself, an `<audio-gain>` custom element to use in the browser, and a `gain` command to use in the terminal.
+_Audio-gain_ is a transform stream to change the volume of audio data. It includes `audio-gain` module with class itself, an `<audio-gain>` custom element to use in a browser, and a `gain` command to use in a terminal.
 
 ## Usage
 
