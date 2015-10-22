@@ -1,5 +1,10 @@
+_Audio-gain_ is a transform stream to change the volume of audio data. It includes stream class itself, an `<audio-gain>` custom element to use in the browser, and a `gain` command to use in the terminal.
+
+## Usage
+
 [![npm install audio-gain](https://nodei.co/npm/audio-gain.png?mini=true)](https://npmjs.org/package/audio-gain/)
 
+Module:
 
 ```js
 var Gain = require('audio-gain');
@@ -17,6 +22,7 @@ setTimeout(function () {
 generator.pipe(gain).pipe(speaker);
 ```
 
+Custom element:
 
 ```html
 <script src="./bundled-dependencies.js"></script>
@@ -29,11 +35,13 @@ generator.pipe(gain).pipe(speaker);
 <audio-speaker id="speaker"></audio-speaker>
 ```
 
+Command:
 
 ```sh
 $ cat sample.wav | gain --volume 0.5 | speaker
 ```
 
+## Related
 
 > [GainNode](https://developer.mozilla.org/en-US/docs/Web/API/GainNode) — gain node in web-audio-api.</br>
 > [pcm-volume](https://npmjs.org/package/pcm-volume) — similar package, volume is taken as tangential.</br>
