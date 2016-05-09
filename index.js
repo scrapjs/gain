@@ -6,9 +6,9 @@
  */
 
 var inherits = require('inherits');
-var Transform = require('stream').Transform;
-var util = require('pcm-util');
+var Through = require('audio-through');
 var extend = require('xtend/mutable');
+var util = require('audio-buffer-utils');
 
 /**
  * Create pcm stream volume controller.
@@ -18,17 +18,17 @@ var extend = require('xtend/mutable');
 function Gain (volume) {
 	if (!(this instanceof Gain)) return new Gain(volume);
 
-	Transform.call(this);
-
 	if (typeof volume === 'number') {
-		this.setVolume(volume);
+		volume = {volume: volume};
 	}
-	else {
-		extend(this, volume)
-	}
+
+	Through.call(this, volume);
 }
 
-inherits(Gain, Transform);
+inherits(Gain, Through);
+
+
+Gain.prototype.volume = 1;
 
 
 /**
@@ -43,21 +43,16 @@ Gain.prototype.setVolume = function (volume) {
 /**
  * Basic transformer
  */
-Gain.prototype._transform = function (chunk, enc, cb) {
-	var self = this;
+Gain.prototype.process = function (buf) {
+	var volume = this.volume;
 
-	chunk = util.mapSamples(chunk, function (sample) {
-		return sample * self.volume;
-	}, this);
+	util.fill(buf, function (x) {
+		return x * volume;
+	});
 
-	cb(null, chunk);
+	return buf;
 }
 
-
-/**
- * PCM stream params
- */
-extend(Gain.prototype, util.defaultFormat);
 
 
 module.exports = Gain;

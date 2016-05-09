@@ -4,9 +4,7 @@
   "description": "Gain node for PCM audio stream",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js",
-    "build": "browserify gain.js -o ./dist/gain.js",
-    "watch": "watchify -r ./index.js:audio-gain -r audio-speaker -r audio-element -r audio-generator -d -o ./bundle.js"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
@@ -26,16 +24,15 @@
   },
   "homepage": "https://github.com/audio-lab/gain",
   "dependencies": {
+    "audio-buffer-utils": "^3.1.1",
     "audio-element": "^1.0.0",
+    "audio-through": "^2.1.0",
     "inherits": "^2.0.1",
-    "pcm-util": "^1.1.0",
     "xtend": "^4.0.0"
   },
   "devDependencies": {
-    "audio-generator": "^1.0.4",
-    "audio-speaker": "^1.0.2",
-    "autoprefixer": "^6.0.3",
-    "browserify": "^11.2.0",
-    "watchify": "^3.4.0"
+    "audio-generator": "^2.0.3",
+    "audio-speaker": "^1.2.4",
+    "autoprefixer": "^6.0.3"
   }
 }

@@ -4,9 +4,9 @@ var Gain = require('./');
 
 
 Generator({
-	duration: 1
+	// duration: 1
 })
 .pipe(Gain({
-	volume: 0.3
+	volume: 1
 }))
 .pipe(Speaker());
