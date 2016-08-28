@@ -4,7 +4,7 @@ var Gain = require('./');
 
 
 Generator({
-	// duration: 1
+	duration: 2
 })
 .pipe(Gain({
 	volume: 1
