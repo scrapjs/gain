@@ -1,3 +1,5 @@
+# audio-gain [![Build Status](https://travis-ci.org/audiojs/audio-gain.svg?branch=master)](https://travis-ci.org/audiojs/audio-gain) [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+
 _Audio-gain_ is a transform stream to change the volume of audio data. It includes `audio-gain` module with class itself, an `<audio-gain>` custom element to use in a browser, and a `gain` command to use in a terminal.
 
 ## Usage
