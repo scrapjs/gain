@@ -31,7 +31,7 @@
     "xtend": "^4.0.0"
   },
   "devDependencies": {
-    "audio-generator": "^2.0.3",
+    "audio-generator": "^2.0.5",
     "audio-speaker": "^1.2.4",
     "autoprefixer": "^6.0.3"
   }
