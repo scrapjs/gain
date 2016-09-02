@@ -1,6 +1,6 @@
 var Speaker = require('audio-speaker');
 var Generator = require('audio-generator');
-var Gain = require('./');
+var Gain = require('./stream');
 
 
 Generator({

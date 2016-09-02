@@ -13,46 +13,28 @@ var util = require('audio-buffer-utils');
 /**
  * Create pcm stream volume controller.
  *
- * @constructor
+ * @function
  */
-function Gain (volume) {
-	if (!(this instanceof Gain)) return new Gain(volume);
-
-	if (typeof volume === 'number') {
-		volume = {volume: volume};
+function gain (options) {
+	if (typeof options === 'number') {
+		options = {volume: options};
+	} else if (!options) {
+		options = {volume: 1};
 	}
 
-	Through.call(this, volume);
-}
+	write.end = function() {};
 
-inherits(Gain, Through);
+	return write;
 
+	function write(buf) {
+		var volume = options.volume;
 
-Gain.prototype.volume = 1;
+		util.fill(buf, function (x) {
+			return x * volume;
+		});
 
+		return buf;
+	};
+};
 
-/**
- * Set current volume
- */
-Gain.prototype.setVolume = function (volume) {
-	if (!volume && volume !== 0) volume = 1;
-	this.volume = volume;
-}
-
-
-/**
- * Basic transformer
- */
-Gain.prototype.process = function (buf) {
-	var volume = this.volume;
-
-	util.fill(buf, function (x) {
-		return x * volume;
-	});
-
-	return buf;
-}
-
-
-
-module.exports = Gain;
+module.exports = gain;
