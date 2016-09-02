@@ -15,32 +15,44 @@ var util = require('audio-buffer-utils');
  */
 function gain(options) {
 	// gain()
-	if (typeof options === 'undefined') options = 1;
+	if (typeof options === 'undefined') options = {volume: 1};
+
+	// gain(Function)
+	if (typeof options === 'function')  options = {volume: options};
 
 	// gain(Number)
 	// gain({volume: Number})
 	if (typeof options === 'number' || typeof options.volume === 'number') {
-		var volume = Math.tan(options.volume || options);
-		options = {volume: function (x) { return x * volume }};
-	}
+		var volume = options.volume || options;
 
-	// gain(Function)
-	else if (typeof options === 'function')  {
-		options = {volume: options};
+		// TODO: options.mode statements here
+		volume = Math.tan(volume);
+
+		options = {volume: volume};
 	}
 
 	// Return functions.
-	write.end = noop;
-	return write;
+	through.end = noop;
+	return through;
 
 	// Write volume to buffer
-	function write(buf) {
+	function through(buf) {
 		var volume = options.volume;
 
-		// Apply volume function on buffer
-		util.fill(buf, volume);
+		// Apply volume multiplication on buffer.
+		if (typeof volume === 'number') {
+			util.fill(buf, function (v) {
+				return v * volume;
+			});
+		}
 
-		// Sync return buffer.
+		// Apply volume function on buffer.
+		else if (typeof volume === 'function') {
+			util.fill(buf, function (v, x, channels) {
+				return v * volume(x, channels, v);
+			});
+		}
+
 		return buf;
 	};
 };
