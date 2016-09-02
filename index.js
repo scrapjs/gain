@@ -1,35 +1,40 @@
 /**
  * PCM volume controller.
- * Same as GainNode in web-audio-api, but for streams.
+ * Same as GainNode in web-audio-api as a generic function.
+ * stream in stream.js, pull-stream in pull.js, element in element.js
  *
  * @module audio-gain
  */
-
+var noop = function () {};
 var util = require('audio-buffer-utils');
 
 /**
- * Create pcm stream volume controller.
+ * Create pcm volume controller.
  *
  * @function
  */
 function gain(options) {
-	if (typeof options === 'number') {
+	if (!options) options = 1;
+	if (typeof options === 'number' || typeof options.volume === 'number') {
+		// adjust gain(Number) || gain({ volume: Number })
+		var volume = options.volume || options;
+		options = {volume: function (x) { return x * volume }};
+	} else if (typeof options === 'function')  {
+		// adjust gain(Function);
 		options = {volume: options};
-	} else if (!options) {
-		options = {volume: 1};
 	}
 
-	write.end = function () {};
-
+	write.end = noop;
 	return write;
 
+	// Write volume to buffer
 	function write(buf) {
 		var volume = options.volume;
 
-		util.fill(buf, function (x) {
-			return x * volume;
-		});
+		// Apply volume function on buffer
+		util.fill(buf, volume);
 
+		// Sync return buffer.
 		return buf;
 	};
 };

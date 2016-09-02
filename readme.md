@@ -1,21 +1,26 @@
 # audio-gain [![Build Status](https://travis-ci.org/audiojs/audio-gain.svg?branch=master)](https://travis-ci.org/audiojs/audio-gain) [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
+> PCM audio gain as function, stream, pull stream, etc.
+
 _Audio-gain_ is a transform stream to change the volume of audio data. It includes `audio-gain` module with class itself, an `<audio-gain>` custom element to use in a browser, and a `gain` command to use in a terminal.
 
 ## Usage
 
 [![npm install audio-gain](https://nodei.co/npm/audio-gain.png?mini=true)](https://npmjs.org/package/audio-gain/)
 
-Module:
+Using  with `audio-gain`
 
 ```js
-var gain = require('audio-gain');
-var speaker = require('audio-speaker');
-var generator = require('audio-generator');
-
+// Create audio.
 var buffer = generator({ duration: 2 });
+
+// Apply gain
 gain({ volume: 0.5 })(buffer);
-speaker()(buffer);
+
+//
+speaker({}, function() {
+
+})(buffer);
 ```
 
 Node Streams:
