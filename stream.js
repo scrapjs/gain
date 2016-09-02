@@ -8,7 +8,7 @@ function Gain(options) {
   if (!(this instanceof Gain)) return new Gain(options);
   this.process = gain(options);
   Through.call(this, options);
-  // this.on('end', gain.end);
+  this.on('end', this.process.end);
 };
 
 inherits(Gain, Through);
