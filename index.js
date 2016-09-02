@@ -12,14 +12,14 @@ var util = require('audio-buffer-utils');
  *
  * @function
  */
-function gain (options) {
+function gain(options) {
 	if (typeof options === 'number') {
 		options = {volume: options};
 	} else if (!options) {
 		options = {volume: 1};
 	}
 
-	write.end = function() {};
+	write.end = function () {};
 
 	return write;
 

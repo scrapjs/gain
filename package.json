@@ -4,7 +4,7 @@
   "description": "Gain node for PCM audio stream",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
     "web-audio",
     "web-components"
   ],
+  "files": [ "index.js", "pull.js", "stream.js", "element.js", "index.html" ],
   "author": "Deema Yvanow <dfcreative@gmail.com>",
   "license": "MIT",
   "bugs": {

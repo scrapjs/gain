@@ -9,9 +9,21 @@ _Audio-gain_ is a transform stream to change the volume of audio data. It includ
 Module:
 
 ```js
-var Gain = require('audio-gain');
-var Speaker = require('audio-speaker');
-var Generator = require('audio-generator');
+var gain = require('audio-gain');
+var speaker = require('audio-speaker');
+var generator = require('audio-generator');
+
+var buffer = generator({ duration: 2 });
+gain({ volume: 0.5 })(buffer);
+speaker()(buffer);
+```
+
+Node Streams:
+
+```js
+var Gain = require('audio-gain/stream');
+var Speaker = require('audio-speaker/stream');
+var Generator = require('audio-generator/stream');
 
 var generator = Generator({ duration: 2 });
 var gain = Gain(0.2);
