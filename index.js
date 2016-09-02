@@ -14,16 +14,22 @@ var util = require('audio-buffer-utils');
  * @function
  */
 function gain(options) {
-	if (!options) options = 1;
+	// gain()
+	if (typeof options === 'undefined') options = 1;
+
+	// gain(Number)
+	// gain({volume: Number})
 	if (typeof options === 'number' || typeof options.volume === 'number') {
-		// adjust gain(Number) || gain({ volume: Number })
-		var volume = options.volume || options;
+		var volume = Math.tan(options.volume || options);
 		options = {volume: function (x) { return x * volume }};
-	} else if (typeof options === 'function')  {
-		// adjust gain(Function);
+	}
+
+	// gain(Function)
+	else if (typeof options === 'function')  {
 		options = {volume: options};
 	}
 
+	// Return functions.
 	write.end = noop;
 	return write;
 
