@@ -8,7 +8,7 @@ _Audio-gain_ is a transform stream to change the volume of audio data. It includ
 
 [![npm install audio-gain](https://nodei.co/npm/audio-gain.png?mini=true)](https://npmjs.org/package/audio-gain/)
 
-### Plain function
+#### Plain function
 
 ```js
 const generator = require('audio-generator');
@@ -28,7 +28,7 @@ let write = speaker();
 })();
 ```
 
-### Node stream
+#### Node stream
 
 ```js
 var Generator = require('audio-generator/stream');
@@ -42,7 +42,7 @@ var speaker = Speaker();
 generator.pipe(gain).pipe(speaker);
 ```
 
-### Pull-stream
+#### Pull-stream
 
 ```js
 var generator = require('audio-generator/pull');
@@ -76,10 +76,11 @@ Command:
 ```sh
 $ cat sample.wav | gain --volume 0.5 | speaker
 ```
+-->
 
 ## Related
 
+> [audio-generator](https://github.com/audiojs/audio-generator) — generate stream with a function.<br/>
+> [audio-speaker](https://github.com/audiojs/audio-speaker) — output stream to node/browser speaker.<br/>
 > [GainNode](https://developer.mozilla.org/en-US/docs/Web/API/GainNode) — gain node in web-audio-api.</br>
 > [pcm-volume](https://npmjs.org/package/pcm-volume) — similar package, volume is taken as tangential.</br>
-> [audio-lab](https://github.com/audio-lab/lab) — audio playground, sound graph constructor.</br>
--->
