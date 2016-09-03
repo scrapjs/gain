@@ -8,39 +8,56 @@ _Audio-gain_ is a transform stream to change the volume of audio data. It includ
 
 [![npm install audio-gain](https://nodei.co/npm/audio-gain.png?mini=true)](https://npmjs.org/package/audio-gain/)
 
-Using  with `audio-gain`
+### Plain function
 
 ```js
-// Create audio.
-var buffer = generator({ duration: 2 });
+const generator = require('audio-generator');
+const gain = require('audio-gain');
+const speaker = require('audio-speaker');
 
-// Apply gain
-gain({ volume: 0.5 })(buffer);
+// Create functions
+let generate = generator({ duration: 2 });
+let gain = gain({ volume: .5});
+let write = speaker();
 
-//
-speaker({}, function() {
-
-})(buffer);
+// Hook up generator → gain → speaker routine
+(function loop (error) {
+	let buffer = generate();
+	buffer = gain(buffer);
+	write(buffer, loop);
+})();
 ```
 
-Node Streams:
+### Node stream
 
 ```js
+var Generator = require('audio-generator/stream');
 var Gain = require('audio-gain/stream');
 var Speaker = require('audio-speaker/stream');
-var Generator = require('audio-generator/stream');
 
 var generator = Generator({ duration: 2 });
-var gain = Gain(0.2);
+var gain = Gain(0.5);
 var speaker = Speaker();
-
-setTimeout(function () {
-	gain.setVolume(0.5);
-}, 1000);
 
 generator.pipe(gain).pipe(speaker);
 ```
 
+### Pull-stream
+
+```js
+var generator = require('audio-generator/pull');
+var gain = require('audio-gain/pull');
+var speaker = require('audio-speaker/pull');
+var pull = require('pull-stream/pull');
+
+pull(
+	generator(Math.random, { duration: 2 }),
+	gain({ volume: .4 }),
+	speaker()
+);
+```
+
+<!--
 Custom element:
 
 ```html
@@ -65,3 +82,4 @@ $ cat sample.wav | gain --volume 0.5 | speaker
 > [GainNode](https://developer.mozilla.org/en-US/docs/Web/API/GainNode) — gain node in web-audio-api.</br>
 > [pcm-volume](https://npmjs.org/package/pcm-volume) — similar package, volume is taken as tangential.</br>
 > [audio-lab](https://github.com/audio-lab/lab) — audio playground, sound graph constructor.</br>
+-->
