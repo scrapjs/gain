@@ -11,6 +11,8 @@
  *
  * @module audio-gain/element
  */
+'use strict';
+
 var Gain = require('audio-gain');
 var AudioElement = require('audio-element');
 

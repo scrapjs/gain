@@ -33,6 +33,6 @@ function gain(options) {
 	if (typeof volume === 'function') return buf => util.fill(buf, (v, x, channels) => v * volume(x, channels, v));
 
 	return buf => util.fill(buf, v => v * volume);
-};
+}
 
 module.exports = gain;
