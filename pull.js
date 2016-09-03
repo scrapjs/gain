@@ -1,3 +1,11 @@
+/**
+ * @module  audio-gain/pull
+ *
+ * pull-stream regulating volume
+ */
+
+'use strict';
+
 var gain = require('./');
 
 module.exports = pull;
@@ -15,4 +23,4 @@ function pull(options) {
       });
     };
   };
-};
+}

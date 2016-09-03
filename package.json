@@ -4,7 +4,9 @@
   "description": "PCM audio gain as function, stream, pull stream, etc.",
   "main": "index.js",
   "scripts": {
-    "test": "node test"
+    "test": "node test",
+    "lint": "eslint *.js --ignore-pattern test*",
+    "preversion": "npm run lint && npm run test"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,6 @@
     "web-audio",
     "web-components"
   ],
-  "files": [ "index.js", "pull.js", "stream.js", "element.js", "index.html" ],
   "author": "Deema Yvanow <dfcreative@gmail.com>",
   "license": "MIT",
   "bugs": {

@@ -1,3 +1,11 @@
+/**
+ * @module audio-gain/stream
+ *
+ * Stream regulating volume of audio
+ *
+ */
+'use strict';
+
 var gain = require('./');
 var inherits = require('inherits');
 var Through = require('audio-through');
@@ -10,6 +18,6 @@ function Gain(options) {
 
   // Create stream
   return new Through(fill, options);
-};
+}
 
 inherits(Gain, Through);

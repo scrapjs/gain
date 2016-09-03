@@ -5,7 +5,8 @@
  *
  * @module audio-gain
  */
-var noop = function () {};
+'use strict';
+
 var util = require('audio-buffer-utils');
 
 /**
@@ -15,46 +16,23 @@ var util = require('audio-buffer-utils');
  */
 function gain(options) {
 	// gain()
-	if (typeof options === 'undefined') options = {volume: 1};
+	if (options == null) options = {volume: 1};
 
 	// gain(Function)
-	if (typeof options === 'function')  options = {volume: options};
-
 	// gain(Number)
-	// gain({volume: Number})
-	if (typeof options === 'number' || typeof options.volume === 'number') {
-		var volume = options.volume || options;
+	else if (typeof options === 'function' || typeof options === 'number')  options = {volume: options};
 
-		// TODO: options.mode statements here
-		volume = Math.tan(volume);
-
-		options = {volume: volume};
+	var volume;
+	if (options.mode === 'tan') {
+		volume = Math.tan(options.volume);
+	} else {
+		volume = options.volume;
 	}
 
-	// Return functions.
-	through.end = noop;
-	return through;
+	//in case if volume is fn
+	if (typeof volume === 'function') return buf => util.fill(buf, (v, x, channels) => v * volume(x, channels, v));
 
-	// Write volume to buffer
-	function through(buf) {
-		var volume = options.volume;
-
-		// Apply volume multiplication on buffer.
-		if (typeof volume === 'number') {
-			util.fill(buf, function (v) {
-				return v * volume;
-			});
-		}
-
-		// Apply volume function on buffer.
-		else if (typeof volume === 'function') {
-			util.fill(buf, function (v, x, channels) {
-				return v * volume(x, channels, v);
-			});
-		}
-
-		return buf;
-	};
+	return buf => util.fill(buf, v => v * volume);
 };
 
 module.exports = gain;
