@@ -32,7 +32,7 @@
     "inherits": "^2.0.1"
   },
   "devDependencies": {
-    "audio-generator": "^2.0.3",
+    "audio-generator": "^2.0.4",
     "audio-speaker": "^1.2.4",
     "autoprefixer": "^6.0.3"
   }
