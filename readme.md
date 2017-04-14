@@ -1,5 +1,7 @@
 # audio-gain [![Build Status](https://travis-ci.org/audiojs/audio-gain.svg?branch=master)](https://travis-ci.org/audiojs/audio-gain) [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/audiojs/audio-gain.svg)](https://greenkeeper.io/)
+
 > PCM audio gain as function, stream, pull stream, etc.
 
 _Audio-gain_ is a transform stream to change the volume of audio data. It includes `audio-gain` module with class itself, an `<audio-gain>` custom element to use in a browser, and a `gain` command to use in a terminal.
