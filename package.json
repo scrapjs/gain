@@ -34,6 +34,6 @@
   "devDependencies": {
     "audio-generator": "^2.0.3",
     "audio-speaker": "^1.2.4",
-    "autoprefixer": "^6.0.3"
+    "autoprefixer": "^7.1.0"
   }
 }
