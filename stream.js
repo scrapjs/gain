@@ -6,7 +6,7 @@
  */
 'use strict';
 
-var gain = require('./');
+var gain = require('./direct');
 var inherits = require('inherits');
 var Through = require('audio-through');
 
