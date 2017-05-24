@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/audiojs/audio-gain",
   "dependencies": {
-    "audio-buffer-utils": "^4.0.0",
+    "audio-buffer-utils": "^5.0.1",
     "audio-element": "^1.0.0",
     "audio-through": "^2.1.0",
     "inherits": "^2.0.1"
