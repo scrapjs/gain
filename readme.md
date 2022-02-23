@@ -31,8 +31,10 @@ Returns output list, if any, otherwise rewrites input arrays.
 
 <!-- Raw WASM function requires a bit of memory management. -->
 
+### JavaScript
+
 ```js
-WebAssembly.instantiateStreaming(fetch('./@audio/gain/gain.wasm'), importObject)
+WebAssembly.instantiateStreaming(fetch('./gain.wasm'), importObject)
 .then(({instance}) => {
 	const { gain, memory, malloc, blockSize } = instance.exports
 
