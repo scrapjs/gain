@@ -30,30 +30,42 @@ Raw WASM function requires a bit of memory management.
 ```js
 WebAssembly.instantiateStreaming(fetch('./@audio/gain/gain.wasm'), importObject)
 .then(({instance}) => {
-	const {
-		gain, memory,
-		GAIN_0, GAIN_1, GAIN_RESULT, 	// pointers
-		A_RATE, K_RATE, I_RATE,				// param types
-		BLOCK_SIZE, MAX_CHANNELS,
-		setBlockSize, setMaxChannels	// config
-	} = instance.exports
+	const { gain, memory, malloc, blockSize } = instance.exports
 
-	const input = new Float32Array(memory.buffer, GAIN_0, BLOCK_SIZE * MAX_CHANNELS),
-				gainParam = new Float32Array(memory.buffer, GAIN_1, BLOCK_SIZE),
-				output = new Float32Array(memory.buffer, GAIN_RESULT, BLOCK_SIZE * MAX_CHANNELS)
+	blockSize.value = 4096 // set max block size
 
-	// a-rate case
-	input.set([...inputChannel1, ...inputChannel2]) // channels with planar layout
-	gainParam.set([...gainValues])
-	gain(2|A_RATE, 1|A_RATE) // 2 a-rate input channels, 1 a-rate gain values
+	// reserve memory slots
+	const inPtr = malloc(2 * blockSize) // 2-channel input
+	const outPtr = malloc(2 * blockSize) // 2-channel output
+	const aGainPtr = malloc(1 * blockSize) // 1-channel a-rate param
+	const kGainPtr = malloc(1) // alternative: alloc single value for k-rate param
 
-	// k-rate case
-	gainParam.set([gainValue])
-	gain(2|A_RATE, 1|K_RATE) // 2 a-rate input channels, 1 k-rate gain values
+	const data = new Float32Array(memory.buffer) // memory view
 
-	output // contains amplified values
+	const processGain = (input, output, param) => {
+		blockSize.value = input[0].length // align block size with input length
+
+		data.set([...input[0], ...input[1]], inPtr) // write input to memory
+
+		// a-rate (accurate) gain values
+		if (param.gain.length > 1) {
+			data.set(param.gain, aGainPtr)
+			gain(inPtr, 2*blockSize, aGainPtr, blockSize, outPtr, 2*blockSize)
+		}
+		// k-rate (controlling) gain values
+		else {
+			data.set(param.gain, kGainPtr)
+			gain(inPtr, 2*blockSize, kGainPtr, 1, outPtr, 2*blockSize)
+		}
+
+		output.set(data.subarray(outPtr, output.length)) // write output from memory
+	}
 });
 ```
+
+This is illustrative flow, not most performant. For optimization shared memory can be used, better writing to inputs etc.
+
+Also it uses [simplest malloc](https://github.com/rain-1/awesome-allocators/blob/master/bump.md), which serves single purpose well.
 
 To get familiar with memory pointers, see the [tutorial](https://wasmbyexample.dev/examples/reading-and-writing-audio/reading-and-writing-audio.assemblyscript.en-us.html).
 
