@@ -8,6 +8,7 @@ Amplify values.
 
 [![npm install @audio/gain](https://nodei.co/npm/@audio/gain.png?mini=true)](https://npmjs.org/package/@audio/gain/)
 
+<!--
 ### `./gain.js`
 
 ```js
@@ -24,7 +25,7 @@ gain(input, gain, output)
 * `gain` can be an array for a-rate or direct value for k-rate param.
 
 Returns output list, if any, otherwise rewrites input arrays.
-
+-->
 
 ### `./gain.wasm`
 
