@@ -2,7 +2,7 @@
 
 > Audio gain DSP module
 
-Apply gain to input values.
+Amplify values.
 
 ## Usage
 
