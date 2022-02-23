@@ -2,7 +2,7 @@
 
 > Audio gain DSP module
 
-Apply gain to input buffer.
+Apply gain to input values.
 
 ## Usage
 
@@ -20,7 +20,7 @@ gain(input, gain, output)
 ```
 
 * `input` is a list of input channels, eg. `[leftValues, rightValues]`.
-* `output` is a list of output channels, optional.
+* `output` is a list of output channels, optional. If omitted, input is used for output.
 * `gain` can be an array for a-rate or direct value for k-rate param.
 
 Returns output list, if any, otherwise rewrites input arrays.
