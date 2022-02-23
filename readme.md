@@ -35,7 +35,7 @@ WebAssembly.instantiateStreaming(fetch('./@audio/gain/gain.wasm'), importObject)
 .then(({instance}) => {
 	const { gain, memory, malloc, blockSize } = instance.exports
 
-	blockSize.value = 4096 // set max block size
+	blockSize.value = 4096 // max block size
 
 	// reserve memory slots
 	const inPtr = malloc(2 * blockSize) // 2-channel input
@@ -45,7 +45,7 @@ WebAssembly.instantiateStreaming(fetch('./@audio/gain/gain.wasm'), importObject)
 
 	const data = new Float32Array(memory.buffer) // memory view
 
-	// called in a loop, eg. audioWorklet.process
+	// sample processing loop
 	const processGain = (input, output, param) => {
 		// align block size with input length
 		// (WAA may have varying block size)
