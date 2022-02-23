@@ -1,4 +1,4 @@
-# @audio/gain [![test](https://github.com/audiojs/gain/actions/workflows/test.yml/badge.svg)](https://github.com/audiojs/gain/actions/workflows/test.yml)
+# @audio/gain [![test](https://github.com/audiojs/gain/actions/workflows/test.yml/badge.svg)](https://github.com/audiojs/gain/actions/workflows/test.yml) [![npm version](https://img.shields.io/npm/v/@audio/gain)](http://npmjs.org/@audio/gain)
 
 > Audio gain DSP module
 
@@ -6,7 +6,7 @@ Amplify values.
 
 ## Usage
 
-[![npm install @audio/gain](https://nodei.co/npm/@audio/gain.png?mini=true)](https://npmjs.org/package/@audio/gain/)
+<!-- [![npm install @audio/gain](https://nodei.co/npm/@audio/gain.png?mini=true)](https://npmjs.org/package/@audio/gain/) -->
 
 <!--
 ### `./gain.js`
@@ -27,9 +27,9 @@ gain(input, gain, output)
 Returns output list, if any, otherwise rewrites input arrays.
 -->
 
-### `./gain.wasm`
+<!-- ### `./gain.wasm` -->
 
-Raw WASM function requires a bit of memory management.
+<!-- Raw WASM function requires a bit of memory management. -->
 
 ```js
 WebAssembly.instantiateStreaming(fetch('./@audio/gain/gain.wasm'), importObject)
