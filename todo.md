@@ -1,6 +1,6 @@
 * Add change volume event
 * tangential and other modes of volume, as pcm-stream
-* engage decibels in output
+* enable decibels in output
 * styles
 	* circular
 	* mixer-fade

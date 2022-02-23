@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node test",
-    "lint": "eslint *.js --ignore-pattern test*",
-    "preversion": "npm run lint && npm run test"
+    "build": "rollup -p 'wasm={sync: [\"gain.wasm\"]}'"
   },
   "repository": {
     "type": "git",
@@ -19,7 +18,7 @@
     "web-audio",
     "web-components"
   ],
-  "author": "Deema Yvanow <dfcreative@gmail.com>",
+  "author": "Dmitry Iv <dfcreative@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/audiojs/audio-gain/issues"
