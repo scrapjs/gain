@@ -35,17 +35,16 @@ Returns output list, if any, otherwise rewrites input arrays.
 
 ```js
 const memory = new WebAssembly.Memory({initial:1, maximum:100})
-const blockSize = new WebAssembly.Global({value:'i32', mutable:true}, 4096) // max block size
 
-WebAssembly.instantiateStreaming(fetch('./gain.wasm'), {})
+WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory, blockSize } })
 .then(({instance}) => {
-	const { gain, malloc } = instance.exports
+	const { gain, alloc, blockSize } = instance.exports
 
 	// reserve memory slots
-	const inPtr = malloc(2 * blockSize) // 2-channel input
-	const outPtr = malloc(2 * blockSize) // 2-channel output
-	const aGainPtr = malloc(1 * blockSize) // 1-channel a-rate param
-	const kGainPtr = malloc(1) // single value for k-rate param
+	const inPtr = alloc(2*blockSize) // 2 input channels
+	const outPtr = alloc(2*blockSize) // 2 output channels
+	const aGainPtr = alloc(blockSize) // 1-channel a-rate param
+	const kGainPtr = alloc(1) // single value for k-rate param
 
 	const data = new Float32Array(memory.buffer) // memory view
 
@@ -60,12 +59,12 @@ WebAssembly.instantiateStreaming(fetch('./gain.wasm'), {})
 		// a-rate (accurate) gain values
 		if (param.gain.length > 1) {
 			data.set(param.gain, aGainPtr)
-			gain(inPtr, 2*blockSize, aGainPtr, blockSize, outPtr, 2*blockSize)
+			gain(inPtr, blockSize * 2, aGainPtr, blockSize, outPtr, blockSize * 2)
 		}
 		// k-rate (controlling) gain values
 		else {
 			data.set(param.gain, kGainPtr)
-			gain(inPtr, 2*blockSize, kGainPtr, 1, outPtr, 2*blockSize)
+			gain(inPtr, blockSize * 2, kGainPtr, 1, outPtr, blockSize * 2)
 		}
 
 		// write output from memory (4 bytes per element)
