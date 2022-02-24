@@ -34,11 +34,12 @@ Returns output list, if any, otherwise rewrites input arrays.
 ### JavaScript
 
 ```js
-WebAssembly.instantiateStreaming(fetch('./gain.wasm'), importObject)
-.then(({instance}) => {
-	const { gain, memory, malloc, blockSize } = instance.exports
+const memory = new WebAssembly.Memory({initial:1, maximum:100})
+const blockSize = new WebAssembly.Global({value:'i32', mutable:true}, 4096) // max block size
 
-	blockSize.value = 4096 // max block size
+WebAssembly.instantiateStreaming(fetch('./gain.wasm'), {})
+.then(({instance}) => {
+	const { gain, malloc } = instance.exports
 
 	// reserve memory slots
 	const inPtr = malloc(2 * blockSize) // 2-channel input
