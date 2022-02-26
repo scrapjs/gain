@@ -34,14 +34,14 @@ Returns output list, if any, otherwise rewrites input arrays.
 ### JavaScript
 
 ```js
-const memory = new WebAssembly.Memory({initial:1, maximum:100})
+const memory = new WebAssembly.Memory({initial:1, maximum: 8}) // can be shared also
 
-WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory, blockSize } })
+WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory } })
 .then(({instance}) => {
 	const { gain, alloc, blockSize } = instance.exports
+	// blockSize initially has max value
 
 	// reserve memory slots (in samples)
-	// blockSize initially has max value
 	const inOffset = alloc(2*blockSize) // 2 input channels
 	const outOffset = alloc(2*blockSize) // 2 output channels
 	const aGainOffset = alloc(1*blockSize) // 1-channel a-rate param
@@ -75,7 +75,7 @@ WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory, blockS
 });
 ```
 
-This is illustrative flow, can be optimized by using shared memory, better writing to inputs etc.
+This is illustrative flow, can be adjusted to use in eg. audio worklet.
 
 It uses [simplest malloc](https://github.com/rain-1/awesome-allocators/blob/master/bump.md), which serves init purpose.
 
