@@ -40,11 +40,12 @@ WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory, blockS
 .then(({instance}) => {
 	const { gain, alloc, blockSize } = instance.exports
 
-	// reserve memory slots
-	const inPtr = alloc(2*blockSize) // 2 input channels
-	const outPtr = alloc(2*blockSize) // 2 output channels
-	const aGainPtr = alloc(blockSize) // 1-channel a-rate param
-	const kGainPtr = alloc(1) // single value for k-rate param
+	// reserve memory slots (in samples)
+	// blockSize initially has max value
+	const inOffset = alloc(2*blockSize) // 2 input channels
+	const outOffset = alloc(2*blockSize) // 2 output channels
+	const aGainOffset = alloc(1*blockSize) // 1-channel a-rate param
+	const kGainOffset = alloc(1) // single value for k-rate param
 
 	const data = new Float32Array(memory.buffer) // memory view
 
@@ -54,22 +55,22 @@ WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory, blockS
 		blockSize.value = input[0].length
 
 		// write input to memory
-		data.set([...input[0], ...input[1]], inPtr)
+		data.set(input[0], inOffset), data.set(input[1], inOffset+blockSize)
 
 		// a-rate (accurate) gain values
 		if (param.gain.length > 1) {
-			data.set(param.gain, aGainPtr)
-			gain(inPtr, blockSize * 2, aGainPtr, blockSize, outPtr, blockSize * 2)
+			data.set(param.gain, aGainOffset)
+			gain(inOffset, aGainOffset, outOffset, 2, 1)
 		}
 		// k-rate (controlling) gain values
 		else {
-			data.set(param.gain, kGainPtr)
-			gain(inPtr, blockSize * 2, kGainPtr, 1, outPtr, blockSize * 2)
+			data.set(param.gain, kGainOffset)
+			gain(inOffset, kGainOffset, outOffset, 2, 0)
 		}
 
 		// write output from memory (4 bytes per element)
-		output[0].set(data.subarray(outPtr>>2, blockSize))
-		output[1].set(data.subarray(outPtr>>2 + blockSize, blockSize))
+		output[0].set(data.subarray(outOffset, blockSize))
+		output[1].set(data.subarray(outOffset + blockSize, blockSize))
 	}
 });
 ```
