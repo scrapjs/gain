@@ -38,14 +38,14 @@ const memory = new WebAssembly.Memory({initial:1, maximum: 8}) // can be shared 
 
 WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory } })
 .then(({instance}) => {
-	const { gain, alloc, blockSize } = instance.exports
-	// blockSize initially has max value
+	const { default: gain, alloc, blockSize, sampleRate } = instance.exports
+	// allocate max block size
+	blockSize.value = 8192
 
 	// reserve memory slots (in samples)
 	const inOffset = alloc(2*blockSize) // 2 input channels
 	const outOffset = alloc(2*blockSize) // 2 output channels
-	const aGainOffset = alloc(1*blockSize) // 1-channel a-rate param
-	const kGainOffset = alloc(1) // single value for k-rate param
+	const gainOffset = alloc(1*blockSize) // 1-channel a-rate param
 
 	const data = new Float32Array(memory.buffer) // memory view
 
@@ -59,13 +59,12 @@ WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory } })
 
 		// a-rate (accurate) gain values
 		if (param.gain.length > 1) {
-			data.set(param.gain, aGainOffset)
-			gain(inOffset, aGainOffset, outOffset, 2, 1)
+			data.set(param.gain, gainOffset)
+			gain(inOffset, gainOffset, outOffset, 2, 1)
 		}
 		// k-rate (controlling) gain values
 		else {
-			data.set(param.gain, kGainOffset)
-			gain(inOffset, kGainOffset, outOffset, 2, 0)
+			gain(inOffset, param.gain, outOffset, 2)
 		}
 
 		// write output from memory (4 bytes per element)
