@@ -45,17 +45,17 @@ WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { init: { memory } })
 
 		// process a-rate (accurate) gain values
 		if (param.gain.length > 1) {
-		data.set(param.gain, pGain)
-		pOut = gain(pIn, pGain)
-	}
-	// process k-rate (controlling) gain values
-	else {
-	pOut = gain(pIn, param.gain)
-	}
+			data.set(param.gain, pGain)
+			pOut = gain(pIn, pGain)
+		}
+		// process k-rate (controlling) gain values
+		else {
+			pOut = gain(pIn, param.gain)
+		}
 
-	// write output from memory
-	output[0].set(data.subarray(pOut, blockSize))
-	output[1].set(data.subarray(pOut+blockSize, blockSize))
+		// write output from memory
+		output[0].set(data.subarray(pOut, blockSize))
+		output[1].set(data.subarray(pOut+blockSize, blockSize))
 	}
 });
 ```
