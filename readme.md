@@ -30,32 +30,32 @@ const memory = new WebAssembly.Memory({initial:1, maximum: 8}) // can be shared
 
 WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { init: { memory } })
 .then(({ instance }) => {
-	const { gain, blockSize, channels } = instance.exports
+	const { gain, blockSize, allocBlock } = instance.exports
 
 	const data = new Float64Array(memory.buffer) // memory view
-	const pIn = channels(2), pGain = channels(1), pOut // argument slots
+	const inPtr = allocBlock(2), gainPtr = allocBlock(1), outPtr // allocate buffers for arguments
 
 	// sample processing loop
 	const processGain = (input, output, param) => {
-		// block size can vary
+		// adjust processing block size
 		blockSize.value = input[0].length
 
 		// write input to memory
-		data.set(input[0], pIn), data.set(input[1], pIn+blockSize)
+		data.set(input[0], inPtr), data.set(input[1], inPtr+blockSize)
 
 		// process a-rate (accurate) gain values
 		if (param.gain.length > 1) {
-			data.set(param.gain, pGain)
-			pOut = gain(pIn, pGain)
+			data.set(param.gain, gainPtr)
+			outPtr = gain(pIn, gainPtr)
 		}
 		// process k-rate (controlling) gain values
 		else {
-			pOut = gain(pIn, param.gain)
+			outPtr = gain(pIn, param.gain[0])
 		}
 
 		// write output from memory
-		output[0].set(data.subarray(pOut, blockSize))
-		output[1].set(data.subarray(pOut+blockSize, blockSize))
+		output[0].set(data.subarray(outPtr, blockSize))
+		output[1].set(data.subarray(outPtr+blockSize, blockSize))
 	}
 });
 ```
