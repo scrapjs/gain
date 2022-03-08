@@ -2,95 +2,82 @@
 
 > Audio gain DSP module
 
-Amplify values.
+Amplify input values.
 
 ## Usage
 
-<!-- [![npm install @audio/gain](https://nodei.co/npm/@audio/gain.png?mini=true)](https://npmjs.org/package/@audio/gain/) -->
+[![npm install @audio/gain](https://nodei.co/npm/@audio/gain.png?mini=true)](https://npmjs.org/package/@audio/gain/)
 
-<!--
+
 ### `./gain.js`
 
 ```js
 import gain from '@audio/gain';
 
-const input = [leftValues, rightValues]
-const output = [new Float32Array(blockSize), new Float32Array(blockSize)]
-
-gain(input, gain, output)
+const output = gain(input, gain)
 ```
 
 * `input` is a list of input channels, eg. `[leftValues, rightValues]`.
-* `output` is a list of output channels, optional. If omitted, input is used for output.
-* `gain` can be an array for a-rate or direct value for k-rate param.
+* `output` is a list of output values. Recycled over multiple calls.
+* `gain` can be an array of values for a-rate (accurate) param, or direct value for k-rate (per block) param.
 
-Returns output list, if any, otherwise rewrites input arrays.
--->
+### `./gain.wasm`
 
-<!-- ### `./gain.wasm` -->
-
-<!-- Raw WASM function requires a bit of memory management. -->
-
-### JavaScript
+Raw WASM function requires a bit of memory management.
 
 ```js
-const memory = new WebAssembly.Memory({initial:1, maximum: 8}) // can be shared also
+const memory = new WebAssembly.Memory({initial:1, maximum: 8}) // can be shared
 
-WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { setup: { memory } })
-.then(({instance}) => {
-	const { default: gain, alloc, blockSize, sampleRate } = instance.exports
-	// allocate max block size
-	blockSize.value = 8192
+WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { init: { memory } })
+.then(({ instance }) => {
+	const { gain, blockSize, channels } = instance.exports
 
-	// reserve memory slots (in samples)
-	const inOffset = alloc(2*blockSize) // 2 input channels
-	const outOffset = alloc(2*blockSize) // 2 output channels
-	const gainOffset = alloc(1*blockSize) // 1-channel a-rate param
-
-	const data = new Float32Array(memory.buffer) // memory view
+	const data = new Float64Array(memory.buffer) 				// memory view
+	const pIn = channels(2), pGain = channels(1), pOut 	// argument slots
 
 	// sample processing loop
 	const processGain = (input, output, param) => {
-		// align block size with input length (WAA may have varying block size)
+		// block size can vary
 		blockSize.value = input[0].length
 
 		// write input to memory
-		data.set(input[0], inOffset), data.set(input[1], inOffset+blockSize)
+		data.set(input[0], pIn), data.set(input[1], pIn+blockSize)
 
-		// a-rate (accurate) gain values
+		// process a-rate (accurate) gain values
 		if (param.gain.length > 1) {
-			data.set(param.gain, gainOffset)
-			gain(inOffset, gainOffset, outOffset, 2, 1)
+			data.set(param.gain, pGain)
+			pOut = gain(pIn, pGain)
 		}
-		// k-rate (controlling) gain values
+		// process k-rate (controlling) gain values
 		else {
-			gain(inOffset, param.gain, outOffset, 2)
+			pOut = gain(pIn, param.gain)
 		}
 
-		// write output from memory (4 bytes per element)
-		output[0].set(data.subarray(outOffset, blockSize))
-		output[1].set(data.subarray(outOffset + blockSize, blockSize))
+		// write output from memory
+		output[0].set(data.subarray(pOut, blockSize))
+		output[1].set(data.subarray(pOut+blockSize, blockSize))
 	}
 });
 ```
 
-This is illustrative flow, can be adjusted to use in eg. audio worklet.
+This is illustrative flow, can be enhanced to use multiple channels, shared memory etc.
 
-It uses [simplest malloc](https://github.com/rain-1/awesome-allocators/blob/master/bump.md), which serves init purpose.
+<!-- It uses [simplest malloc](https://github.com/rain-1/awesome-allocators/blob/master/bump.md), which serves init purpose. -->
 
-To get familiar with memory pointers, see the [tutorial](https://wasmbyexample.dev/examples/reading-and-writing-audio/reading-and-writing-audio.assemblyscript.en-us.html).
+<!-- To get familiar with memory pointers, see the [tutorial](https://wasmbyexample.dev/examples/reading-and-writing-audio/reading-and-writing-audio.assemblyscript.en-us.html). -->
 
-<!--
+
 ### `./gain.son`
 
 Can be used in [sonr](https://github.com/audio-lab/sonr) as:
 
 ```
-import gain from '@audio/gain'
+import gain from './gain.son'
 
-mySource | gain(.45)
+gain(mySource, .45)
+mySource |> gain(.45) // pipe style
 ```
--->
+
 
 <!--
 ### `./gain-stream.js`
