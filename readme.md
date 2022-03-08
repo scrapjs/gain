@@ -30,33 +30,33 @@ const memory = new WebAssembly.Memory({initial:1, maximum: 8}) // can be shared
 
 WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { init: { memory } })
 .then(({ instance }) => {
-	const { gain, blockSize, channels } = instance.exports
+  const { gain, blockSize, channels } = instance.exports
 
-	const data = new Float64Array(memory.buffer) 				// memory view
-	const pIn = channels(2), pGain = channels(1), pOut 	// argument slots
+  const data = new Float64Array(memory.buffer)         // memory view
+  const pIn = channels(2), pGain = channels(1), pOut   // argument slots
 
-	// sample processing loop
-	const processGain = (input, output, param) => {
-		// block size can vary
-		blockSize.value = input[0].length
+  // sample processing loop
+  const processGain = (input, output, param) => {
+  // block size can vary
+  blockSize.value = input[0].length
 
-		// write input to memory
-		data.set(input[0], pIn), data.set(input[1], pIn+blockSize)
+  // write input to memory
+  data.set(input[0], pIn), data.set(input[1], pIn+blockSize)
 
-		// process a-rate (accurate) gain values
-		if (param.gain.length > 1) {
-			data.set(param.gain, pGain)
-			pOut = gain(pIn, pGain)
-		}
-		// process k-rate (controlling) gain values
-		else {
-			pOut = gain(pIn, param.gain)
-		}
+  // process a-rate (accurate) gain values
+  if (param.gain.length > 1) {
+  data.set(param.gain, pGain)
+  pOut = gain(pIn, pGain)
+  }
+  // process k-rate (controlling) gain values
+  else {
+  pOut = gain(pIn, param.gain)
+  }
 
-		// write output from memory
-		output[0].set(data.subarray(pOut, blockSize))
-		output[1].set(data.subarray(pOut+blockSize, blockSize))
-	}
+  // write output from memory
+  output[0].set(data.subarray(pOut, blockSize))
+  output[1].set(data.subarray(pOut+blockSize, blockSize))
+  }
 });
 ```
 
@@ -103,9 +103,9 @@ var speaker = require('audio-speaker/pull');
 var pull = require('pull-stream/pull');
 
 pull(
-	generator(Math.random, { duration: 2 }),
-	gain({ volume: .4 }),
-	speaker()
+  generator(Math.random, { duration: 2 }),
+  gain({ volume: .4 }),
+  speaker()
 );
 ```
 -->
