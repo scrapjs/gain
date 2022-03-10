@@ -30,15 +30,15 @@ const memory = new WebAssembly.Memory({initial:1, maximum: 8}) // can be shared
 
 WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { init: { memory } })
 .then(({ instance }) => {
-	const { gain, blockSize, allocBlock } = instance.exports
+	const { gain, allocBlock, blockSize } = instance.exports
 
 	const data = new Float64Array(memory.buffer) // memory view
-	const inPtr = allocBlock(2), gainPtr = allocBlock(1), outPtr // allocate buffers for arguments
+	const inPtr = allocBlock(2), gainPtr = allocBlock(1) // allocate audio buffers
 
 	// sample processing loop
 	const processGain = (input, output, param) => {
 		// adjust processing block size
-		blockSize.value = input[0].length
+		blockSize.value = input[0].length, outPtr
 
 		// write input to memory
 		data.set(input[0], inPtr), data.set(input[1], inPtr+blockSize)
@@ -46,11 +46,11 @@ WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { init: { memory } })
 		// process a-rate (accurate) gain values
 		if (param.gain.length > 1) {
 			data.set(param.gain, gainPtr)
-			outPtr = gain(pIn, gainPtr)
+			outPtr = gain(inPtr, gainPtr)
 		}
 		// process k-rate (controlling) gain values
 		else {
-			outPtr = gain(pIn, param.gain[0])
+			outPtr = gain(inPtr, param.gain[0])
 		}
 
 		// write output from memory
@@ -75,7 +75,7 @@ Can be used in [sonr](https://github.com/audio-lab/sonr) as:
 import gain from './gain.son'
 
 gain(mySource, .45)
-mySource |> gain(.45) // pipe style
+mySource | gain(.45)  // pipe style
 ```
 
 
