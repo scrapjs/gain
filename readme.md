@@ -14,12 +14,15 @@ Amplify input values.
 ```js
 import gain from '@audio/gain';
 
-const output = gain(input, gain)
-```
+// mono, k-param gain
+[output] = gain([[0.1,0.2,...inputValues]], .75);
 
-* `input` is a list of input channels, eg. `[leftValues, rightValues]`.
-* `output` is a list of output values. Recycled over multiple calls.
-* `gain` can be an array of values for a-rate (accurate) param, or direct value for k-rate (per block) param.
+// stereo, a-param gain
+[outputLeft, outputRight] = gain([[0.1,...leftInput], [-0.1,...rightInput]], [.5,.6,...gainValues]);
+
+// multichannel, a-param gain
+outputChannels = gain([...inputChannels], gainValues);
+```
 
 ### `./gain.wasm`
 
@@ -30,10 +33,10 @@ const memory = new WebAssembly.Memory({initial:1, maximum: 8}) // can be shared
 
 WebAssembly.instantiateStreaming(fetch('./gain.wasm'), { init: { memory } })
 .then(({ instance }) => {
-	const { gain, allocBlock, blockSize } = instance.exports
+	const { gain, block, blockSize } = instance.exports
 
 	const data = new Float64Array(memory.buffer) // memory view
-	const inPtr = allocBlock(2), gainPtr = allocBlock(1) // allocate audio buffers
+	const inPtr = block(2), gainPtr = block(1) // allocate batch slots for audio buffers
 
 	// sample processing loop
 	const processGain = (input, output, param) => {
@@ -71,11 +74,11 @@ This is illustrative flow, can be enhanced to use multiple channels, shared memo
 
 Can be used in [sonr](https://github.com/audio-lab/sonr) as:
 
-```
-import gain from './gain.son'
+```fs
+# './gain.son': gain;
 
-gain(mySource, .45)
-mySource | gain(.45)  // pipe style
+gain(mySource, 0.45);	// direct fn
+mySource | gain(0.45); // pipe style
 ```
 
 
