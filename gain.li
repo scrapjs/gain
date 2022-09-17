@@ -1,0 +1,12 @@
+range = 0..
+
+// direct case
+gain(v, volume=1.0 ~ range) = v * volume;
+
+// channel (batch) clauses
+gain_1k([l], volume=1.0 ~ range) = [l] * volume;
+gain_1a([l], [volume=1.0 ~ range]) = [l] * volume;
+gain_2k([l, r], volume=1.0 ~ range) = [l,r] * volume;
+gain_2a([l, r], [volume=1.0 ~ range]) = [l,r] * volume;
+gain_k([..ch], volume=1.0 ~ range) = [..ch] * volume;
+gain_a([..ch], [volume=1.0 ~ range]) = [..ch] * volume;

@@ -70,12 +70,12 @@ This is illustrative flow, can be enhanced to use multiple channels, shared memo
 <!-- To get familiar with memory pointers, see the [tutorial](https://wasmbyexample.dev/examples/reading-and-writing-audio/reading-and-writing-audio.assemblyscript.en-us.html). -->
 
 
-### `./gain.son`
+### `./gain.lin`
 
-Can be used in [sonr](https://github.com/audio-lab/sonr) as:
+Can be used in [lino](https://github.com/audio-lab/lino) as:
 
 ```fs
-# './gain.son': gain;
+@'./gain.lin#gain';
 
 gain(mySource, 0.45);	// direct fn
 mySource | gain(0.45); // pipe style
